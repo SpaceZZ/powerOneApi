@@ -9,17 +9,18 @@ def calculate_max_power(data):
     :return:
     :rtype:
     """
-    new_data = {key: float(value['value']) for key, value in data.items()}
+    new_data = {key: float(value["value"]) for key, value in data.items()}
     if new_data:
         max_power = max(new_data, key=new_data.get)
     else:
         return 0, ""
     return max_power, new_data[max_power]
 
+
 def findMiddle(input_list):
-    middle = float(len(input_list))/2
+    middle = float(len(input_list)) / 2
     if middle % 2 != 0:
-        return input_list[int(middle - .5)]
+        return input_list[int(middle - 0.5)]
     else:
         return input_list[int(middle)]
 
@@ -27,13 +28,15 @@ def findMiddle(input_list):
 def get_only_valid_data(data):
     """
     Get only non zero or null data into the dictionary
-    :param data: 
-    :type data: 
-    :return: 
-    :rtype: 
+    :param data:
+    :type data:
+    :return:
+    :rtype:
     """
-    new_data = {key: float(value['value']) for key, value in data.items()}
-    non_zero_data = {key.split(" ")[1]: round(value) for key, value in new_data.items() if value != 0}
+    new_data = {key: float(value["value"]) for key, value in data.items()}
+    non_zero_data = {
+        key.split(" ")[1]: round(value) for key, value in new_data.items() if value != 0
+    }
     start_time = list(non_zero_data.keys())[0]
     end_time = list(non_zero_data.keys())[-1]
     mid_time = findMiddle(list(non_zero_data.keys()))

@@ -34,7 +34,11 @@ class EmailSender:
             server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
             server.ehlo()
             server.login(self.email_user, self.password)
-            server.sendmail(from_addr=self.email_user, to_addrs=self.recipients, msg=email_text.as_string())
+            server.sendmail(
+                from_addr=self.email_user,
+                to_addrs=self.recipients,
+                msg=email_text.as_string(),
+            )
             server.close()
             logging.info("Email has been sent!")
 
@@ -50,10 +54,12 @@ class EmailSender:
         body = data
 
         msg = MIMEMultipart()
-        msg['From'] = self.email_user
-        msg['To'] = ", ".join(self.recipients)
-        msg['Subject'] = "Kapalkowo - produkcja z paneli PV | {}".format(datetime.date(datetime.now()))
-        body = MIMEText(data, 'html')
+        msg["From"] = self.email_user
+        msg["To"] = ", ".join(self.recipients)
+        msg["Subject"] = "Kapalkowo - produkcja z paneli PV | {}".format(
+            datetime.date(datetime.now())
+        )
+        body = MIMEText(data, "html")
         msg.attach(body)
 
         return msg

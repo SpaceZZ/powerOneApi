@@ -1,6 +1,7 @@
 import datetime
 
-def render(data, max_time=None, max_power=None, image_link = ""):
+
+def render(data, max_time=None, max_power=None, image_link=""):
     """
     Function renders the html to be returned
     :return:
@@ -10,7 +11,8 @@ def render(data, max_time=None, max_power=None, image_link = ""):
         image_link = f"<img src={image_link}/>"
     else:
         image_link = ""
-    html = r"""
+    html = (
+        r"""
             <!DOCTYPE html>
             <html>
             <head>
@@ -35,15 +37,22 @@ def render(data, max_time=None, max_power=None, image_link = ""):
                 <th>Wartość</th>
                 <th>Jednostka</th>
               </tr>
-            """ + render_data(data) +\
-           """
+            """
+        + render_data(data)
+        + """
             </table>
             <br>
-            """ + image_link + f"<p>Największa moc: {max_time} - {max_power:.1f} W</p>" + f"<p>Dane pobrane o {datetime.datetime.now()}</p>" + """
+            """
+        + image_link
+        + f"<p>Największa moc: {max_time} - {max_power:.1f} W</p>"
+        + f"<p>Dane pobrane o {datetime.datetime.now()}</p>"
+        + """
             </body>
             </html>
             """
+    )
     return html
+
 
 def render_data(data):
     """
@@ -61,7 +70,7 @@ def render_data(data):
 
     for key, value in data.items():
         html = raw_html.replace("<label>", key)
-        html = html.replace("<value>", value['value'])
-        html = html.replace("<unit>", value['unit'])
+        html = html.replace("<value>", value["value"])
+        html = html.replace("<unit>", value["unit"])
         result += html
     return result
