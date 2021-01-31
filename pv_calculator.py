@@ -1,6 +1,3 @@
-from datetime import datetime
-
-
 def calculate_max_power(data):
     """
     Function calculates the maximum
@@ -17,7 +14,14 @@ def calculate_max_power(data):
     return max_power, new_data[max_power]
 
 
-def findMiddle(input_list):
+def find_middle(input_list):
+    """
+    Function finds the middle item from the list
+    :param input_list:
+    :type input_list:
+    :return:
+    :rtype:
+    """
     middle = float(len(input_list)) / 2
     if middle % 2 != 0:
         return input_list[int(middle - 0.5)]
@@ -39,14 +43,6 @@ def get_only_valid_data(data):
     }
     start_time = list(non_zero_data.keys())[0]
     end_time = list(non_zero_data.keys())[-1]
-    mid_time = findMiddle(list(non_zero_data.keys()))
+    mid_time = find_middle(list(non_zero_data.keys()))
 
     return non_zero_data, start_time, end_time, mid_time
-
-
-def get_start_time(data):
-    return None
-
-
-def get_end_time(data):
-    return None
