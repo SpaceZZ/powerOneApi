@@ -8,6 +8,7 @@ import email_sender
 import html_render
 import pv_calculator
 import image_charts
+from sql_insert import sql_handling
 
 if __name__ == "__main__":
     # read configuration from the file
@@ -49,3 +50,5 @@ if __name__ == "__main__":
             recipients=config.recipients,
         )
         sender.send(html)
+        # insert into sql for archiving
+        sql_handling.handle_sql_archiving(result)
