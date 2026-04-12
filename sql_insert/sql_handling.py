@@ -1,63 +1,62 @@
-import mysql.connector
-from sql_insert import sqlconfig
+import logging
 import datetime
+import mysql.connector
+
+logger = logging.getLogger(__name__)
 
 
-def create_connection():
+def create_connection(config):
     """
-    Create SQL connection to the server
-    Returns:
-
+    Create SQL connection using credentials from the Configurator object.
+    :param config: Configurator instance
+    :return: mysql.connector connection
     """
     return mysql.connector.connect(
-        host=sqlconfig.host,
-        user=sqlconfig.user,
-        password=sqlconfig.password,
-        database=sqlconfig.database
+        host=config.db_host,
+        user=config.db_user,
+        password=config.db_password,
+        database=config.db_name,
     )
 
 
-def handle_sql_archiving(results):
+def handle_sql_archiving(results, config):
     """
-    Handles the total insertion and connection fo the sql
-    Args:
-        results: dictionary with results
+    Archives all measurement results to the database in a single transaction.
+    :param results: dict with measurement data
+    :param config: Configurator instance (provides DB credentials)
     """
-    mydb = create_connection()
-    # Get the current timestamp
+    if not config.db_host:
+        logger.warning("No [DATABASE] section in config.ini — skipping SQL archiving")
+        return
+
+    try:
+        mydb = create_connection(config)
+    except mysql.connector.Error as ex:
+        logger.error(f"Could not connect to database: {ex}")
+        return
+
     now = datetime.datetime.now().isoformat()
 
-    for key, result in results.items():
-        values = format_values(key, result, now)
-        insert_into_sql(mydb, values)
+    try:
+        mycursor = mydb.cursor()
+        sql_insert = """
+            INSERT INTO measurements(`SYSTEM`, NAME, `TIMESTAMP`, VALUE, DESCRIPTION, QUALITY, UNIT)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """
+        rows = [_format_values(key, result, now) for key, result in results.items()]
+        mycursor.executemany(sql_insert, rows)
+        mydb.commit()  # single commit for the entire batch
+        mycursor.close()
+        logger.info(f"Archived {len(rows)} measurements to database")
+    except mysql.connector.Error as ex:
+        logger.error(f"Database insert failed: {ex}")
+        mydb.rollback()
+    finally:
+        mydb.close()
 
-    mydb.close()
 
-
-def format_values(key, values, time_now):
-    # format correctly the values received
-    quality = '0'
-
-    value = values['value']
-    if value:
-        quality = '1'
-
-    values = ('PV', key, time_now, values['value'], 'Kapalkowo', quality, values['unit'])
-    return values
-
-
-def insert_into_sql(connection, values):
-    mycursor = connection.cursor()
-
-    # Define the SQL query with placeholders for parameterized query
-    sqlInsert = """
-           INSERT INTO measurements(`SYSTEM`, NAME, `TIMESTAMP`, VALUE, DESCRIPTION, QUALITY, UNIT) 
-           VALUES (%s, %s, %s, %s, %s, %s, %s)
-       """
-
-    # Execute the SQL query with the values
-    mycursor.execute(sqlInsert, values)
-
-    # Commit the transaction to save changes
-    connection.commit()
-    mycursor.close()
+def _format_values(key, values, time_now):
+    """Formats a single measurement row for SQL insertion."""
+    value = values["value"]
+    quality = "1" if value is not None else "0"
+    return ("PV", key, time_now, value, "Kapalkowo", quality, values["unit"])

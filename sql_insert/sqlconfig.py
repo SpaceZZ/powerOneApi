@@ -1,4 +1,3 @@
-host = "localhost"
-user = "pv_user"
-password = "47DR9exKA3cjCe"
-database ="db"
+# This file is intentionally empty.
+# Database credentials are now stored in config.ini under the [DATABASE] section
+# and accessed via the Configurator class. See configurator.py.

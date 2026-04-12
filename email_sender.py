@@ -1,20 +1,19 @@
+"""
+Classes and functions for rendering, formatting and sending the daily PV report via email.
+"""
 import logging
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.mime.application import MIMEApplication
 from datetime import datetime
-from datetime import timedelta
 
-"""
-Classes and functions for rendering, formatting and sending the recipes through the email.
-"""
+logger = logging.getLogger(__name__)
 
 
 class EmailSender:
     """
-    Class to send HTML email with the recipes.
-    Class initializes with the user and password for the email account, together with the list of recipents
+    Sends an HTML email report via Gmail SMTP.
+    Initialised with the sender credentials and a comma-separated list of recipients.
     """
 
     def __init__(self, email, password, recipients):
@@ -24,10 +23,9 @@ class EmailSender:
 
     def send(self, data):
         """
-        Method builds and sends the email with the menu
-        :return:
+        Builds and sends the HTML email.
+        :param data: HTML string to embed as the email body
         """
-
         email_text = self.render_body(data)
 
         try:
@@ -40,26 +38,23 @@ class EmailSender:
                 msg=email_text.as_string(),
             )
             server.close()
-            logging.info("Email has been sent!")
+            logger.info("Email sent successfully to %s", self.recipients)
 
-        except Exception as e:
-            logging.exception("There was an issue with sending an email")
+        except Exception:
+            logger.exception("Failed to send email")
 
     def render_body(self, data):
         """
-        Method renders the HTML based body of the email
-        :param data:
-        :return:
+        Wraps the HTML body in a MIME email message.
+        :param data: HTML string
+        :return: MIMEMultipart message object
         """
-        body = data
-
         msg = MIMEMultipart()
         msg["From"] = self.email_user
         msg["To"] = ", ".join(self.recipients)
         msg["Subject"] = "Kapalkowo - produkcja z paneli PV | {}".format(
             datetime.date(datetime.now())
         )
-        body = MIMEText(data, "html")
-        msg.attach(body)
+        msg.attach(MIMEText(data, "html"))
 
         return msg

@@ -1,7 +1,10 @@
 import datetime
+import logging
 import time
 import requests
 import json
+
+logger = logging.getLogger(__name__)
 
 
 class Session:
@@ -38,8 +41,8 @@ class Session:
     def get_data(self, extended=False):
         """
         Method returns the power measurement from the installation
-        :return: Today production
-        :rtype:
+        :return: Today production as dict, or empty dict on failure
+        :rtype: dict
         """
         if extended:
             api_link = self._construct_extended_api_link()
@@ -56,11 +59,23 @@ class Session:
             if response.status_code == 200:
                 data = self._convert_response_to_json(response.content)
                 return data
-        except TimeoutError:
-            print("Timeout error")
+            elif response.status_code == 401:
+                logger.error("Authentication failed (401) — check credentials in config.ini")
+                return {}
+            elif response.status_code == 429:
+                logger.warning("Rate limited by Aurora Vision API (429)")
+                return {}
+            else:
+                logger.error(f"Unexpected HTTP status {response.status_code} from Aurora Vision API")
+                return {}
+        except requests.exceptions.Timeout:
+            logger.error("Request timed out after 15 seconds")
+            return {}
+        except requests.exceptions.ConnectionError as ex:
+            logger.error(f"Connection error while reaching Aurora Vision API: {ex}")
             return {}
         except Exception as ex:
-            print(f"Following exception has occurred while executing the request {ex}")
+            logger.exception(f"Unexpected error while executing the request: {ex}")
             return {}
 
     def _construct_api_link(self):
@@ -103,11 +118,11 @@ class Session:
                                 )
                                 result[_datetime] = self._generate_value_unit_dict(bin_item["value"], "watts")
                     return result
-            except ValueError:
-                print("Didn't find the labels in the api response")
+            except (ValueError, KeyError) as ex:
+                logger.error(f"Failed to parse API response: {ex}")
                 return result
         else:
-            print("Body of the response was empty")
+            logger.warning("Body of the response was empty")
             return result
 
     def _construct_extended_api_link(self):
