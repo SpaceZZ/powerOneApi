@@ -1,0 +1,3876 @@
+openapi: 3.0.0
+info:
+  title: Aurora Vison APIs
+  description: Harness the power of data from FIMER's photovoltaic systems
+  version: '1.0'
+servers:
+- url: https://api.auroravision.net/api/rest
+  variables: {}
+paths:
+  /status:
+    get:
+      tags:
+      - Service Info
+      summary: Maintenance Status
+      description: Allows to retrieve the Aurora Vision maintenance banner to know if there are any scheduled or ongoing maintenance.<br>If no banner is present, therefore no maintenance is scheduled or ongoing, the API response will provide empty content.<br><hr><strong>Returns:</strong><ul><li>Aurora Vision Maintanance Banner</li></ul><hr><strong>Example (CURL)</strong><br>curl --request GET https://api.auroravision.net/api/rest/status
+      operationId: Retrieve Maintenance Banner
+      responses:
+        200:
+          description: 'OK'
+          content:
+           application/json:
+              example: 
+               result: "Dear customer, Aurora Vision will be down for maintenance on 01/12/2021 starting from 8:00 AM CET.All services will be temporarily unavailable, however no data loss will occur. We apologize for the inconvenience and appreciate your understanding."
+        204:
+          description: 'No content available'
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter/header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /eula:
+    get:
+      tags:
+      - Service Agreements
+      summary: EULA
+      description: Allows user to actively retrieve and read the Aurora Vision EULA.<br><br><strong>Note:</strong> the API also needs the Aurora Vision account credentials (<i>UserID</i> and <i>Password</i>) nested in the call via <i>HTTP Basic Authentication</i> method.<hr><strong>Returns:</strong><ul><li>Aurora Vision's EULA</li></ul><hr><strong>Example (CURL)</strong><br><a href="https://documentation.auroravision.net/index.html%3Fp=1271.html" target="_blank_">Aurora Vision APIs - User Guide - Rate Limit</a>
+      operationId: Retrieve EULA
+      parameters:
+      - name: X-AuroraVision-ApiKey
+        in: header
+        description: 'Aurora Vision Api-Key'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '1a23b456-c789-1d23-12ef-ghil123456mn-1o23'
+      responses:
+        200:
+          description: 'OK'
+          content:
+           application/json:
+              example:
+               result: "IMPORTANT: PLEASE READ THE TERMS AND CONDITIONS OF THIS EULA CAREFULLY BEFORE CONTINUING WITH THE INSTALLATION OF TOOLS, MOBILE APPLICATIONS AND/OR THE USE OF OTHER AURORA VISION"
+           application/html:
+              example:
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter/header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+    put:
+      tags:
+      - Service Agreements
+      summary: Accept EULA
+      description: Allows user to accept the Aurora Vision EULA.<br><br><strong>Note:</strong> the API also needs the Aurora Vision account credentials (<i>UserID</i> and <i>Password</i>) nested in the call via <i>HTTP Basic Authentication</i> method.<hr><strong>Returns:</strong><ul><li>Aurora Vision's EULA Acceptance Status</li></ul><hr><strong>Example (CURL)</strong><br><a href="https://documentation.auroravision.net/index.html%3Fp=1271.html" target="_blank_">Aurora Vision APIs - User Guide - Rate Limit</a>
+      operationId: Accept EULA
+      parameters:
+      - name: X-AuroraVision-ApiKey
+        in: header
+        description: 'Aurora Vision Api-Key'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '1a23b456-c789-1d23-12ef-ghil123456mn-1o23'
+      responses:
+        200:
+          description: 'OK'
+          content:
+           application/json:
+              example:
+               result: "ACCEPTED"
+           application/html:
+              example:
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter/header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /authenticate:
+    get:
+      tags:
+      - Authentication
+      summary: Authenticate
+      description: Allows user to authenticate to the Aurora Vision APIs service to obtain the <i>X-AuroraVision-Token</i> to correctly use the APIs calls made available. The <i>X-AuroraVision-Token</i> is subject to the terms of the EULA and expires after 60 minutes of complete inactivity; if the terms of the EULA have not been accepted, the API will respond with a dedicated error.<br><br><strong>Note:</strong> the API also needs the Aurora Vision account credentials (<i>UserID</i> and <i>Password</i>) nested in the call via <i>HTTP Basic Authentication</i> method.<hr><strong>Returns:</strong><ul><li>Aurora Vision Access Token</li></ul><hr><strong>Example (CURL)</strong><br><a href="https://documentation.auroravision.net/index.html%3Fp=1269.html" target="_blank_">Aurora Vision APIs - User Guide - Authentication</a>
+      operationId: Authenticate
+      parameters:
+      - name: X-AuroraVision-ApiKey
+        in: header
+        description: 'Aurora Vision Api-Key'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '1a23b456-c789-1d23-12ef-ghil123456mn-1o23'
+      responses:
+        200:
+          description: 'OK'
+          content:
+           application/json:
+              example: 
+               result: "Abcdef1ghi2=?//lmno3456pqvw789yz!"
+           application/xml:
+              example:
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter/header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        500:
+          description: 'EULA Not Accepted'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/asset/{entityID}/info:
+    get:
+      tags:
+      - Assets
+      summary: Asset Info
+      description: Allows to retrieve info on an Aurora Vision Asset.<br> An Asset can be a Portfolio, Plant, Plant Group, Logger or Device.<br><hr><strong>Returns:</strong><ul><li>Asset's Entity ID</li><li>Asset's Category</li><li>Asset's Name</li><li>Asset's Description <i>(if available</i>)</li><li>Asset's State<ul><li><strong>ACTIVE</strong></li><li><strong>DELINQUENT</strong></li><li><strong>DECOMMISSIONED</strong></li></ul><br></li><li>Parents Entity ID(s) (<i>if available</i>)</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl -- https://api.auroravision.net/api/rest/v1/asset/12345678/info --header "X-AuroraVision-Token:cdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetAssetInfo
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Asset entityID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 assetEntityID: 12345678,
+                 assetCategory: [ 'Plant' ],
+                 assetName: 'Name',
+                 assetDescription: '',
+                 assetState: 'ACTIVE',
+                 parentsEIDs: [ 12345678 ]
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/portfolioGroup:
+    get:
+      tags:
+      - Organizations
+      summary: Portfolios in Organization
+      description: Allows to retrieve info on the Organization (<i>PortfolioGroup</i>) the user is associated with together with the list of active portfolios contained in the Organization (<i>portfolioGroupPortfolios</i>).<br><hr><strong>Returns:</strong><ul><li>Organization Entity ID</li><li>Organization Name</li><br><b>For every portfolio in the list:</b><ul><li>Portfolio Entity ID</li><li>Portfolio Name</li></ul></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Hierarchical Structure</a></p>
+      operationId: GetPortfoliosInOrganization
+      parameters:
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result:
+                 {
+                  portfolioGroupEntityID: 12345678,
+                  portfolioGroupName: "Organization",
+                  portfolioGroupPortfolios: [
+                    {
+                      portfolioEntityID: 12345678,
+                      portfolioName: "Portfolio 1"
+                    },
+                    {
+                      portfolioEntityID: 12345678,
+                      portfolioName: "Portfolio 2"
+                    }
+                  ]
+              }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+        204:
+          description: 'No content (user not associated to an organization)'
+      deprecated: false
+  /v1/portfolio/{entityID}/plants:
+    get:
+      tags:
+      - Portfolios
+      summary: Plants in Portfolio
+      description: Allows to retrieve the list of Plants in a Portfolio. <br><hr><strong>Returns:</strong><ul><strong>For every plant in the list:</strong><li>Plant Entity ID </li><li>Plant Name</li><li>Plant Description (<i>if available</i>)</li><li>Plant State<ul><li><strong>ACTIVE</strong></li><li><strong>DELINQUENT</strong></li><li><strong>DECOMMISSIONED</strong></li></ul><br><li>Plant Status <ul><li><strong>NORM</strong></li><li><strong>LOW</strong></li><li><strong>MEDIUM</strong></li><li><strong>HIGH</strong></li></ul></ul><br></strong><ul><strong>General information:</strong><li>Last Page (<i>boolean</i>)</li><li>First Page (<i>boolean</i>)</li><li>Number of elements in the page</li><li>Total elements in the portfolio</li><li>Total pages</li><li>Page size</li><li>Page number</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Hierarchical Structure</a></p>
+      operationId: GetPlantsinPortfolio
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Portfolio ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: page
+        in: query
+        description: 'Page Number<br> If not entered, the API always returns the first page.'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: '0'
+          default: '0 ( = First Page )'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 content: [ 
+                   {
+                   plantEntityID: 0,
+                   plantName: 'Name',
+                   plantDescription: 'Description',
+                   plantState: 'ACTIVE',
+                   plantStatus: 'NORM',
+                   },
+                   {
+                   plantEntityID: 1,
+                   plantName: 'Name',
+                   plantDescription: 'Description',
+                   plantState: 'ACTIVE',
+                   plantStatus: 'MEDIUM',
+                   },
+                 ],
+                 lastPage: 'false',
+                 fisrtPage: 'true',
+                 numberOfElements: 50,
+                 totalElements: 700,
+                 totalPages: 50,
+                 pageSize: 50,
+                 pageNumber: 0
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/portfolio/{entityID}/plantGroups:
+    get:
+      tags:
+      - Portfolios
+      summary: Plant Groups in Portfolio
+      description: Allows to retrieve the list of Plant Groups in a Portfolio. <br><hr><strong>Returns:</strong><ul><strong>For every plant group in the list:</strong><li>Plant Group Entity ID </li><li>Plant Group Name</li><li>Plant Group State<ul><li><strong>ACTIVE</strong></li><li><strong>DELINQUENT</strong></li><li><strong>DECOMMISSIONED</strong></li></ul></li></ul><br></strong><ul><strong>General portfolio information:</strong><li>Last Page (<i>boolean</i>)</li><li>First Page (<i>boolean</i>)</li><li>Number of elements in the page</li><li>Total elements in the portfolio</li><li>Total pages</li><li>Page size</li><li>Page number</li></ul><hr><strong>Fully Structured API Call Example</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/portfolio/12345678/plantGroups --header "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetPlantGroupsinPortfolio
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Portfolio ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: page
+        in: query
+        description: 'Page Number<br> If not entered, the API always returns the first page.'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: '0'
+          default: '0 ( = First Page )'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 content: [ 
+                   {
+                   plantGroupEntityID: 0,
+                   plantGroupName: 'Name',
+                   plantGroupState: 'ACTIVE',
+                   },
+                   {
+                   plantGroupEntityID: 1,
+                   plantGroupName: 'Name',
+                   plantGroupState: 'DELETED',
+                   },
+                 ],
+                 lastPage: 'false',
+                 fisrtPage: 'true',
+                 numberOfElements: 15,
+                 totalElements: 15,
+                 totalPages: 1,
+                 pageSize: 50,
+                 pageNumber: 0
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/portfolio/{entityID}/info:
+    get:
+      tags:
+      - Portfolios
+      summary: Portfolio Info
+      description: Allows to retrieve info of a Portfolio.<br><hr><strong>Returns:</strong><ul><li>Portfolio's Entity ID</li><li>Portfolio's Name</li></li><li>Portfolio's State<ul><li><strong>ACTIVE</strong></li><li><strong>DELINQUENT</strong></li><li><strong>DECOMMISSIONED</strong></li></ul></li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/portfolio/12345678/info --header "X-AuroraVision-Token:cdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetPortfolioInfo
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Portfolio ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 portfolioEntityID: 0,
+                 portfolioName: 'Name',
+                 portfolioState: 'ACTIVE',
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/plantGroup/{entityID}/plants:
+    get:
+      tags:
+      - Plant Groups
+      summary: Plants in Plant Group
+      description: Allows to retrieve the list of Plant(s) in a Plant Group.<br><hr><strong>Returns:</strong><ul><strong>For every plant in the list:</strong><li>Plant Entity ID </li><li>Plant Name</li><li>Plant Description (<i>if available</i>)</li><li>Plant State<ul><li><b>ACTIVE</b></li><li><b>DELINQUENT</b></li><li><b>DECOMMISSIONED</b></li></ul></li><br><li>Plant Status <ul><li><b>NORMAL</b></li><li><b>LOW</b></li><li><b>MEDIUM</b></li><li><b>HIGH</b></li></ul></li></ul></li></ul><br></strong></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/plantGroup/12345678/plants --header "X-AuroraVision-Token:cdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetPlantsinPlantGroup
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant Group ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: plantStatus
+        in: query
+        description: 'Plant Status'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'HIGH'
+          - 'MEDIUM'
+          - 'LOW'
+          - 'NORM'
+          - 'INFO'
+          example: 'plantStatus'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 plantEntityID: 0,
+                 plantName: 'Name',
+                 plantDescription: 'Description',
+                 plantState: 'ACTIVE',
+                 plantStatus: 'NORM',
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/plantGroup/{entityID}/info:
+    get:
+      tags:
+      - Plant Groups
+      summary: Plant Group Info
+      description: Allows to retrieve info on a Plant Group.<br><hr><strong>Returns:</strong><ul><li>Plant Group's Entity ID</li><li>Plant Group's Name</li><li>Plant Group's State<ul><li><strong>ACTIVE</strong></li><li><strong>DELINQUENT</strong></li><li><strong>DECOMMISSIONED</strong></li></ul><br></li><li>Portfolio Entity ID(s) (<i>Hierarchy Parent</i>)</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/plantGroup/12345678/info --header "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetPlantGroupInfo
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant Group ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 plantGroupEntityID: 0,
+                 plantGroupName: 'Name',
+                 plantGroupState: 'ACTIVE',
+                 portfolioEID: 123,
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/plant/{entityID}/loggers:
+    get:
+      tags:
+      - Plants
+      summary: Loggers in Plant
+      description: Allows to retrieve the list of Loggers in a Plant. <br><hr><strong>Returns:</strong><ul><strong>For every logger in the list:</strong><li>Logger Entity ID </li><li>Logger Name</li><li>Logger Description (<i>model description</i>)</li><li>Logger State<ul><li><strong>ACTIVE</strong></li><li><strong>DELINQUENT</strong></li><li><strong>DECOMMISSIONED</strong></li></ul><br></li><li>Logger MAC Address</li><li>Logger Manufacturer</li><li>Logger Model</li></ul><br></strong></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/plant/12345678/loggers --header "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetLoggersinPlant
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 plantEntityID: 0,
+                 loggers: [
+                  {
+                    loggerEntityID: 1,
+                    loggerName: 'Name',
+                    loggerDescription: 'Logger Card',
+                    loggerState: 'ACTIVE',
+                    loggerMACAddress: 'AA:00:AA:00:AA:00',
+                    loggerManufacturer: 'Manufacturer',
+                    loggerModel: 'Model',
+                  }
+                ]
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/plant/{entityID}/billingData:
+    get:
+      tags:
+      - Plants
+      summary: Billing Data
+      description: Allows to retrieve Plant’s lifetime and current day produced energy (<i>kWh</i>).<br><hr><strong>Returns:</strong><ul><li>Plant Entity ID </li><li>Plant Lifetime Energy</li><li>Plant Current Day Energy</li><li>Last Reported Time (<i>UTC</i>)</li><li>Plant Time Zone</li><li>Plant Status<ul><li><strong>NORM</strong></li><li><strong>LOW</strong></li><li><strong>MEDIUM</strong></li><li><b>HIGH</b></li></ul></li></ul><br></strong></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/plant/12345678/billingData --header "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetBillingData
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 plantEntityID: 0,
+                 plantLifetimeEnergykWh: '100.000',
+                 plantCurrentDayEnergykWh: '50.111',
+                 plantLastReportedTimeUTC: '20201213182825',
+                 plantTimeZone: 'Europe/Rome',
+                 plantStatus: 'NORM',
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/plant/{entityID}/dailyProduction:
+    get:
+      tags:
+      - Plants
+      summary: Daily Production
+      description: Allows to retrieve Plant’s daily produced energy. <br><hr><strong>Returns:</strong><ul><li>Plant Entity ID</li><li>Daily Production</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/plant/12345678/dailyProduction?startDate=20220101&endDate=20201022 --header "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetDailyProduction
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: startDate
+        in: query
+        description: 'Start Date<br>( <i>Pattern</i>: yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br>( <i>Pattern</i>: yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      responses:
+        200:
+          description: 'Ok'
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/plant/{entityID}/info:
+    get:
+      tags:
+      - Plants
+      summary: Plant Info
+      description: Allows to retrieve detailed info of a Plant. <br><hr><strong>Returns:</strong><ul><li>Plant's Entity ID</li><li>Plant's Name</li><li>Plant's Description (<i> if available </i>)<li>Plant's State<ul><li><strong>NORM</strong></li><li><strong>DELINQUENT</strong></li><li><strong>DECOMMISSIONED</strong></li></ul></li><br><li>Plant's Location</li><ul><li>Country</li><li>Region</li><li>City</li><li>Street</li><li>Postal Code</li><li>Timezone</li><li>Latitude</li><li>Longitude</li><li>Elevation</li></ul><br><li>Plant's Configuration</li><ul><li>System Size</li><li>Install Date</li><li>First Reported Date</li></ul><br><li>Portfolio Entity ID (<i> Hierarchy Parent </i>)</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/plant/12345678/info --header "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetPlantInfo
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 plantEntityID: 0,
+                 plantName: 'Name',
+                 plantDescription: 'Description',
+                 plantState: 'ACTIVE',
+                 plantLocation: {
+                   country: 'Italy',
+                   region: 'Tuscany',
+                   city: 'AMBRA',
+                   street1: 'VIA DEL CASTELLO',
+                   postalCode: '52021',
+                   timeZone: 'Europe/Rome',
+                   latitude: 12.3456789,
+                   longitude: 12.3456789,
+                   elevation: 123.456789,
+                 },
+                 plantConfiguration: {
+                   systemSize: 6.0,
+                   installDate: '2020-12-13 07:00 AM +0000',
+                   firstReportedDate: '2020-12-14 07:00 AM +0000',
+                 },
+                 portfolioEID: 12345678,
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/plant/{entityID}/status:
+    get:
+      tags:
+      - Plants
+      summary: Plant Status
+      description: Allows to retrieve Plant status. If the Plant Status is different from NORMAL, returns the hierarchical explosion of loggers/devices affected by a status different from NORMAL.<br><hr><strong>Note:</strong> <i>The severity of the events depends on the configured error profile assigned to the specific plant being called. For more information check the "Profile Configuration" section on Plant Portfolio Manager.</i><hr><strong>Returns:</strong><ul><li>Plant's Entity ID</li><li>Plant Name</li><li>Plant State <ul><li><b>ACTIVE</b></li><li><b>DELINQUENT</b></li><li><b>DECOMMISSIONED</b></li></ul></li><br><li>Plant Status <ul><li><b>NORM</b></li><li><b>LOW</b></li><li><b>MEDIUM</b></li><li><b>HIGH</b></li></ul></li></ul><p><i>Only if a logger entity has a STATUS different from NORMAL</i>:</p><ul><li>loggerEntityID<li>loggerName</li><li>loggerState<li>loggerStatus</li></ul><p><i>Only if a device entity has a STATUS different from NORMAL</i>:</p><ul><li>deviceEntityID<li>deviceName</li><li>deviceState<li>deviceSerialNumber</li><li>deviceManufacturer</li><li>deviceStatus</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/plant/12345678/status --header "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetPlantStatus
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                  plantEntityID: 12345678,
+                  plantName: "Name",
+                  plantState: "active",
+                  plantStatus: "MEDIUM",
+                  loggerStatuses: [
+                    {
+                      loggerEntityID: 12345678,
+                      loggerName: "A0:A0:A0:A0:A0:A0",
+                      loggerState: "active",
+                      loggerStatus: "MEDIUM",
+                      deviceStatuses: [
+                          {
+                            deviceEntityID: 12345678,
+                            deviceName: "inverter_001_",
+                            deviceState: "active",
+                            deviceSerialNumber: "123456-1P23-1234",
+                            deviceManufacturer: "FIMER",
+                            deviceStatus: "MEDIUM"
+                          }
+                      ]
+                    }
+                  ]
+              }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/plant/{entityID}/events:
+    get:
+      tags:
+      - Plants
+      summary: Plant Events
+      description: Allows to retrieve the list of Plant's Events. <br><hr><strong>Returns:</strong><ul><strong>For every event in the list:</strong><li>Plant Entity ID </li><li>Plant Name</li><li>Device Entity ID (<i>the reference device is the one impacted by the event</i> )</li><li>Device Identifying Adress (<i>the reference device is the one impacted by the event</i> ) </li><li>Event Type</li><li>Event Severity</li><li>Event Start Date (<i>UTC Time</i>)</li><li>Event End Date (<i>UTC Time</i>)</li></ul><br></strong><ul><strong>General information:</strong><li>Last Page (<i>boolean</i>)</li><li>First Page (<i>boolean</i>)</li><li>Number of elements in the page</li><li>Total elements in the portfolio</li><li>Total pages</li><li>Page size</li><li>Page number</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/plant/12345678/events?eventsKind=PROFILE&eventsState=ACTIVE&eventsOccurrence=H24 --header "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetPlantEvents
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: eventsKind
+        in: query
+        description: 'Filter the events kind to display: <ul><li><strong>Profile</strong>: events mapped on the profile configured on Aurora Vision;</li><li><strong>Source</strong>: machine events mapped to Aurora Vision;</li></ul>(<i>Please refer to:&nbsp; <a href="#" target="_blank_">Aurora Vision APIs - User Guide - Error Status Management</a></i>&nbsp;)'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'PROFILE'
+          - 'SOURCE'
+          example: 'PROFILE'
+      - name: eventsType
+        in: query
+        description: 'Filter the type of events to display<br>(<i>Please refer to:&nbsp; <a href="#" target="_blank_">Aurora Vision APIs - User Guide - Error Status Management</a></i>&nbsp;)'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'NOTCOM'
+          - 'DEVCOM'
+          - 'LOGCOM'
+          - 'PWROFF'
+          - 'GENFLT'
+          - 'GENALR'
+          - 'TMPFLT'
+          - 'TMPALR'
+          - 'ACGFLT'
+          - 'ACGALR'
+          - 'ACVFLT'
+          - 'ACVALR'
+          - 'ACIFLT'
+          - 'ACFFLT'
+          - 'ACFALR'
+          - 'DCGFLT'
+          - 'DCVFLT'
+          - 'DCIFLT'
+          - 'STROFF'
+          - 'DCVALR'
+          - 'ACIALR'
+          - 'VDCLOW'
+          - 'SUBOFF'
+          - 'PR-ING'
+          - 'DCGALR'
+          - 'DCIALR'
+          - 'GENSTS'
+          - 'TMPSTS'
+          - 'ACGSTS'
+          - 'ACVSTS'
+          - 'ACISTS'
+          - 'ACFSTS'
+          - 'DCGSTS'
+          - 'DCVSTS'
+          - 'DCISTS'
+          - 'MNTFLT'
+          - 'MNTALR'
+          - 'MNTSTS'
+          - 'EXPLMT'
+          example: 'LOGCOM'
+      - name: eventsState
+        in: query
+        description: 'Filter the state of events to display'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'ALL'
+          - 'ACTIVE'
+          - 'CLOSED'
+          example: 'ACTIVE'
+      - name: eventsOccurrence
+        in: query
+        description: 'Filter the occurence of events to display'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'H24'
+          - 'D7'
+          - 'D30'
+          example: 'H24'
+      - name: page
+        in: query
+        description: 'Page number'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: '0'
+          default: '0 ( = First Page )'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 content: [ 
+                   {
+                   plantEntityID: 0,
+                   plantName: 'Name',
+                   loggerEntityID: 12345678,
+                   loggerMACAddress: 'AA:00:AA:00:AA:00',
+                   eventSeverity: 'HIGH',
+                   eventType: 'LOGCOM',
+                   eventStart: '2020-12-14 11:43 AM +0000',
+                   eventEnd: '2020-12-15 11:43 AM +0000',
+                   },
+                   {
+                   plantEntityID: 0,
+                   plantName: 'Name',
+                   deviceEntityID: 12345678,
+                   deviceSerialNumber: '123456-1P123-1234',
+                   eventSeverity: 'MEDIUM',
+                   eventType: 'DEVCOM',
+                   eventStart: '2020-12-14 11:43 AM +0000',
+                   eventEnd: '2020-12-15 11:43 AM +0000',
+                   },
+                 ],
+                 lastPage: 'false',
+                 fisrtPage: 'true',
+                 numberOfElements: 50,
+                 totalElements: 82,
+                 totalPages: 2,
+                 pageSize: 50,
+                 pageNumber: 0
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/plant/{entityID}/weather:
+    get:
+      tags:
+      - Plants
+      summary: Plant Weather
+      description: Allows to retrieve weather data of a Plant.  <br><hr><strong>Returns:</strong><ul><li>Plant's Entity ID</li><li>Date ( <i>in epoch</i> )</li><br><li>Plant's Location</li><ul><li>Country</li><li>City</li><li>Latitude</li><li>Longitude</li></ul><br><li>Condition</li><ul><li>Temperature ( <i>value and unit</i> )</ul><br><li>Atmosphere</li><ul><li>Humidity ( <i>value</i> )</li><li>Pressure ( <i>value and unit</i> )</li><li>Visibility ( <i>value and unit</i> )</li></ul><br><li>Wind</li><ul><li>Speed ( <i>value and unit</i> )</li><li>Direction ( <i>value</i> )</li></ul></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/plant/12345678/weather --header "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetPlantWeather
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 entityID: 12345678,
+                 date: 1608279829,
+                 location: {
+                   city: 'Ambra',
+                   country: 'IT',
+                   latitude: 12.34,
+                   longitude: 12.34,
+                   },
+                 contidion: {
+                   temperature: {
+                     value: 13.7,
+                     unit: "C",
+                   },
+                   code: 'day-sunny',
+                   },
+                  atmosphere: {
+                   humidity: {
+                     value: 82,
+                   },
+                    pressure: {
+                     value: 1015,
+                     unit: 'hPa',
+                   },
+                   visibility: {
+                     value: 10000,
+                     unit: 'm',
+                   },
+                   },
+                   wind: {
+                    speed: {
+                     value: 1.5,
+                     unit: 'm/s',
+                   },
+                   direction: {
+                     value: 0,
+                   },
+                   },
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/logger/{entityID}/devices:
+    get:
+      tags:
+      - Loggers
+      summary: List of Devices
+      description: Allows to retrieve the list of Devices monitored by a Logger. <br><hr><strong>Returns:</strong><ul><strong>For every device in the list:</strong><li>Device Entity ID </li><li>Device Category</li><li>Device Name</li><li>Device Description</li><li>Device State<ul><li><strong>ACTIVE</strong></li><li><strong>DELINQUENT</strong></li><li><strong>DECOMMISSIONED</strong></li></ul><br></li><li>Device Serial Number</li><li>Device Manufacturer</li><li>Device Model</li><li>Device Firmware Version ( <i> if available </i> )</li><li>Device Communication Interface</li><li>Device RS485 Address</li><li>Device First Reported Date</li><li>Logger Entity ID ( <i> Hierarchy Parent </i> )</li></ul><br></strong><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/logger/12345678/devices --header "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetListDevices
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Logger ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 loggerEntityID: 12345678,
+                 devices: [ 
+                   {
+                   deviceEntityID: 12345678,
+                   deviceCategory: [
+                     'Inverter',
+                   ],
+                   deviceName: 'Inverter 01',
+                   deviceDescription: 'Description',
+                   deviceState: 'Active',
+                   deviceSerialNumber: '123456-1P123-1234',
+                   deviceManufacturer: 'Manufacturer',
+                   deviceModel: 'Model',
+                   deviceFWVersion: 'Version 1234',
+                   deviceCommunicationInterface: '0',
+                   deviceRS485Address: '1',
+                   deviceFirstReportedDate: '2020-12-14 11:27 AM +0000',
+                   loggerEID: 123456,
+                   },
+                   {
+                   deviceEntityID: 12345678,
+                   deviceCategory: [
+                     'Inverter',
+                   ],
+                   deviceName: 'Power Meter',
+                   deviceDescription: 'Description',
+                   deviceState: 'Active',
+                   deviceSerialNumber: '123456-1P123-1234',
+                   deviceManufacturer: 'Manufacturer',
+                   deviceModel: 'Model',
+                   deviceCommunicationInterface: '0',
+                   deviceRS485Address: '1',
+                   deviceFirstReportedDate: '2020-12-14 11:27 AM +0000',
+                   loggerEID: 123456,
+                   },
+                  ]
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/logger/{entityID}/info:
+    get:
+      tags:
+      - Loggers
+      summary: Logger Info
+      description: Allows to retrieve info of a Logger. <br><hr><strong>Returns:</strong><ul><li>Logger Entity ID</li><li>Logger Name</li><li>Logger Description</li><li>Logger State<ul><li><strong>ACTIVE</strong></li><li><strong>DELINQUENT</strong></li><li><strong>DECOMMISSIONED</strong></li></ul><br></li><li>Logger Serial Number</li><li>Logger MAC Address</li><li>Logger Manufacturer</li><li>Logger Model</li><li>Logger Firmware Version</li><li>Logger First Reported Date</li><li>Plant Entity ID ( <i>Hierarchy Parent</i> )</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/logger/12345678/info --header "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetLoggerInfo
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 loggerEntityID: 12345678,
+                 loggerName: 'Name',
+                 loggerDescription: 'Description',
+                 loggerState: 'ACTIVE',
+                 loggerSerialNumber: '123456-1P123-1234',
+                 loggerMACAddress: 'AA:00:AA:00:AA:00',
+                 loggerManufacturer: 'Manufacturer',
+                 loggerModel: 'Model',
+                 loggerFWVersion: '1.2.3',
+                 loggerFirstReportedDate: '2020-12-14 11:27 AM +0000',
+                 plantEntityID: 12345678,
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/logger/{entityID}/status:
+    get:
+      tags:
+      - Loggers
+      summary: Logger Status
+      description: Allows to retrieve Logger status. If the Logger Status is different from NORMAL, returns the hierarchical explosion of devices affected by a status different from NORMAL.<br><hr><strong>Note:</strong> <i>The severity of the events depends on the configured error profile assigned to the specific plant of which the logger is a child. For more information check the "Profile Configuration" section on Plant Portfolio Manager.</i><hr><strong>Returns:</strong><ul><li>Logger's Entity ID</li><li>Logger Name</li><li>Logger State<ul><li><b>ACTIVE</b></li><li><b>DELINQUENT</b></li><li><b>DECOMMISSIONED</b></li></ul></li><br><li>Logger Status <ul><li><b>NORMAL</b></li><li><b>LOW</b></li><li><b>MEDIUM</b></li><li><b>HIGH</b></li></ul></li></ul></li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/logger/12345678/status --header "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetLoggerStatus
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 loggerEntityID: 12345678,
+                      loggerName: "A0:A0:A0:A0:A0:A0",
+                      loggerState: "active",
+                      loggerStatus: "MEDIUM",
+                      deviceStatuses: [
+                          {
+                            deviceEntityID: 12345678,
+                            deviceName: "inverter_001_",
+                            deviceState: "active",
+                            deviceSerialNumber: "123456-1P23-1234",
+                            deviceManufacturer: "FIMER",
+                            deviceStatus: "MEDIUM"
+                          }
+                      ]
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/logger/{entityID}/events:
+    get:
+      tags:
+      - Loggers
+      summary: Logger Events
+      description: Allows to retrieve the list of Logger's Events. <br><hr><strong>Returns:</strong><ul><strong>For every event in the list:</strong><li>Plant Entity ID ( <i>Hierarchy Parent</i> )</li><li>Plant Name</li><li>LOgger Entity ID</li><li>Logger MAC Adress</li><li>Event Type</li><li>Event Severity</li><li>Event Start Date (<i>UTC Time</i>)</li><li>Event End Date (<i>UTC Time</i>)</li></ul><br></strong><ul><strong>General information:</strong><li>Last Page (<i>boolean</i>)</li><li>First Page (<i>boolean</i>)</li><li>Number of elements in the page</li><li>Total elements in the portfolio</li><li>Total pages</li><li>Page size</li><li>Page number</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/logger/12345678/events?eventsKind=PROFILE&eventsState=ACTIVE&eventsOccurrence=H24 --header "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetLoggerEvents
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Logger ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: eventsKind
+        in: query
+        description: 'Filter the events kind to display: <ul><li><strong>Profile</strong>: events mapped on the profile configured on Aurora Vision;</li><li><strong>Source</strong>: machine events mapped to Aurora Vision;</li></ul>(<i>Please refer to:&nbsp; <a href="#" target="_blank_">Aurora Vision APIs - User Guide - Error Status Management</a></i>&nbsp;)'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'PROFILE'
+          - 'SOURCE'
+          example: 'PROFILE'
+      - name: eventsType
+        in: query
+        description: 'Filter the type of events to display<br>(<i>Please refer to:&nbsp; <a href="#" target="_blank_">Aurora Vision APIs - User Guide - Error Status Management</a></i>&nbsp;)'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'DEVCOM'
+          - 'LOGCOM'
+          example: 'LOGCOM'
+      - name: eventsState
+        in: query
+        description: 'Filter the state of events to display'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'ALL'
+          - 'ACTIVE'
+          - 'CLOSED'
+          example: 'ACTIVE'
+      - name: eventsOccurrence
+        in: query
+        description: 'Filter the occurence of events to display'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'H24'
+          - 'D7'
+          - 'D30'
+          example: 'H24'
+      - name: page
+        in: query
+        description: 'Page number'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: '0'
+          default: '0 ( = First Page )'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 content: [ 
+                   {
+                   plantEntityID: 12345678,
+                   loggerName: 'Name',
+                   loggerEntityID: 12345678,
+                   loggerMACAddress: 'AA:00:AA:00:AA:00',
+                   eventSeverity: 'HIGH',
+                   eventType: 'LOGCOM',
+                   eventStart: '2020-12-14 11:43 AM +0000',
+                   eventEnd: '2020-12-15 11:43 AM +0000',
+                   },
+                 ],
+                 lastPage: 'false',
+                 fisrtPage: 'true',
+                 numberOfElements: 50,
+                 totalElements: 82,
+                 totalPages: 2,
+                 pageSize: 50,
+                 pageNumber: 0
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/device/:
+    get:
+      tags:
+      - Devices
+      summary: Compact Hierarchy from Serial Number
+      description: Allows to dynamically retrieve the compaxt hierarchy starting from the device Serial Number.<br>The compact hierarchy dynamically adapts according to the type of device inserted in the request.<br><hr><strong>Returns:</strong><ul><li>Plant Entity ID</li><li>Plant Name</li><li>Entity Type</li><li>Plant State<ul><li><strong>ACTIVE</strong></li><li><strong>DELINQUENT</strong></li><li><strong>DECOMMISSIONED</strong></li></ul><br></li><li>Logger Entity ID (<i>only if device searched is connected to an exeternal logger</i>)</li><li>Entity Type</li><li>Logger State<ul><li><strong>ACTIVE</strong></li><li><strong>DELINQUENT</strong></li><li><strong>DECOMMISSIONED</strong></li></ul><br><li>Device Entity ID</li><li>Device Type</li><li>Device State<ul><li><strong>ACTIVE</strong></li><li><strong>DELINQUENT</strong></li><li><strong>DECOMMISSIONED</strong></li></ul><br><li>Device Serial Number (<i>Aurora Vision Format</i>)</li><li>Device Model</li><li>Communication Master MAC Address (<i>if available</i>)</li><li>Communication Master (<i>if available</i>)</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/device/?serialNumber=2210123456 "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetCompactHierarchyfromSerialNumber
+      parameters:
+      - name: serialNumber
+        in: query
+        description: 'Device Serial Number: <ul><li><strong>Aurora Vision Format</strong>: 123456-PPPP-WWYY</li><li><strong>Production Format</strong>: YYWW123456</ul>Serial Number Parts:<br><i><ul><li>Sequential Number = 123456</li><li>Part Number = PPPP</li><li>Production Week = WW</li><li>Production Year = YY</i>'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '123456-PPPP-WWYY or YYWW123456'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                   entityID: 12345678,
+                   Name: 'Plant 01',
+                   type: 'Plant',
+                   state: "ACTIVE",
+                   children: [
+                     {
+                      entityID: 1111111,
+                      type: 'Battery',
+                      state: 'ACTIVE',
+                      serialNumber: '123456-1P123-1234',
+                      model: 'FIMER REACT2-BATT',
+                      deviceFWVersion: 'Version 1234',
+                      macAddress: 'aa:aa:aa:aa:aa:aa',
+                      communicationMaster: 'REACT2-5.0-TL SN 123456-1P111-1234',
+                    }
+                  ]
+               }
+        400:
+          description: 'Device Serial Number invalid or incomplete'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/device/{entityID}/info:
+    get:
+      tags:
+      - Devices
+      summary: Device Info
+      description: Allows to retrieve info of a Device. <br><hr><strong>Returns:</strong><ul><li>Device Entity ID</li><li>Device Category</li><li>Device Name</li><li>Device Description</li><li>Device State<ul><li><strong>ACTIVE</strong></li><li><strong>DELINQUENT</strong></li><li><strong>DECOMMISSIONED</strong></li></ul><br></li><li>Device Serial Number</li><li>Device Manufacturer</li><li>Device Model</li><li>Device Firmware Version ( <i>if available</i> )</li><li>Device Communication Interface</li><li>Device RS485 Address</li><li>Device First Reported Date</li><li>Logger Entity ID ( <i>Hierarchy Parent</i> )</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/device/12345678/info "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetDeviceInfo
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Device ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                   deviceEntityID: 12345678,
+                   deviceCategory: [
+                     'Inverter',
+                   ],
+                   deviceName: 'Inverter 01',
+                   deviceDescription: 'Description',
+                   deviceState: 'Active',
+                   deviceSerialNumber: '123456-1P123-1234',
+                   deviceManufacturer: 'Manufacturer',
+                   deviceModel: 'Model',
+                   deviceFWVersion: 'Version 1234',
+                   deviceCommunicationInterface: '0',
+                   deviceRS485Address: '1',
+                   deviceFirstReportedDate: '2020-12-14 11:27 AM +0000',
+                   loggerEID: 123456,
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/device/{entityID}/status:
+    get:
+      tags:
+      - Devices
+      summary: Device Status
+      description: Allows to retrieve Device staus. <br><hr><strong>Returns:</strong><ul><li>Device Entity ID</li><li>Device Name</li><li>Device State<ul><li><b>ACTIVE</b></li><li><b>DELINQUENT</b></li><li><b>DECOMMISSIONED</b></li></ul></li><br><li>Device Status <ul><li><b>NORMAL</b></li><li><b>LOW</b></li><li><b>MEDIUM</b></li><li><b>HIGH</b></li></ul></li></ul></li></ul><li>Device Serial Number</li><li>Device Manufacturer</li><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/device/12345678/status "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetDeviceStatus
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Device ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 deviceEntityID: 12345678,
+                 deviceName: 'Inverter_001',
+                 devicetate: 'ACTIVE',
+                 deviceSerialNumber: '123456-1P123-1234',
+                 deviceManufacturer: 'Manufacturer',
+                 loggerStatus: 'NORM',
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/device/{entityID}/events:
+    get:
+      tags:
+      - Devices
+      summary: Device Events
+      description: Allows to retrieve the list of Devices's Events. <br><hr><strong>Returns:</strong><ul><strong>For every event in the list:</strong><li>Plant Entity ID ( <i>Hierarchy Super-Parent</i> )</li><li>Plant Name</li><li>Logger Entity ID ( <i>Hierarchy Parent</i> )</li><li>Logger MAC Adress</li><li>Device Entity ID</li><li>Device Serial Number</li><li>Event Type</li><li>Event Severity</li><li>Event Start Date (<i>UTC Time</i>)</li><li>Event End Date (<i>UTC Time</i>)</li></ul><br></strong><ul><strong>General information:</strong><li>Last Page (<i>boolean</i>)</li><li>First Page (<i>boolean</i>)</li><li>Number of elements in the page</li><li>Total elements in the portfolio</li><li>Total pages</li><li>Page size</li><li>Page number</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/device/12345678/events?eventsKind=PROFILE&eventsState=ACTIVE&eventsOccurrence=H24 "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetDeviceEvents
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Logger ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: eventsKind
+        in: query
+        description: 'Filter the events kind to display: <ul><li><strong>Profile</strong>: events mapped on the profile configured on Aurora Vision;</li><li><strong>Source</strong>: machine events mapped to Aurora Vision;</li></ul>(<i>Please refer to:&nbsp; <a href="#" target="_blank_">Aurora Vision APIs - User Guide - Error Status Management</a></i>&nbsp;)'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'PROFILE'
+          - 'SOURCE'
+          example: 'PROFILE'
+      - name: eventsType
+        in: query
+        description: 'Filter the type of events to display<br>(<i>Please refer to:&nbsp; <a href="#" target="_blank_">Aurora Vision APIs - User Guide - Error Status Management</a></i>&nbsp;)'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'DEVCOM'
+          - 'LOGCOM'
+          - 'PWROFF'
+          - 'GENFLT'
+          - 'GENALR'
+          - 'TMPFLT'
+          - 'TMPALR'
+          - 'ACGFLT'
+          - 'ACGALR'
+          - 'ACVFLT'
+          - 'ACVALR'
+          - 'ACIFLT'
+          - 'ACFFLT'
+          - 'ACFALR'
+          - 'DCGFLT'
+          - 'DCVFLT'
+          - 'DCIFLT'
+          - 'STROFF'
+          - 'DCVALR'
+          - 'ACIALR'
+          - 'VDCLOW'
+          - 'SUBOFF'
+          - 'PR-ING'
+          - 'DCGALR'
+          - 'DCIALR'
+          - 'GENSTS'
+          - 'TMPSTS'
+          - 'ACGSTS'
+          - 'ACVSTS'
+          - 'ACISTS'
+          - 'ACFSTS'
+          - 'DCGSTS'
+          - 'DCVSTS'
+          - 'DCISTS'
+          - 'MNTFLT'
+          - 'MNTALR'
+          - 'MNTSTS'
+          - 'EXPLMT'
+          example: 'DEVCOM'
+      - name: eventsState
+        in: query
+        description: 'Filter the state of events to display'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'ALL'
+          - 'ACTIVE'
+          - 'CLOSED'
+          example: 'ACTIVE'
+      - name: eventsOccurrence
+        in: query
+        description: 'Filter the occurence of events to display'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'H24'
+          - 'D7'
+          - 'D30'
+          example: 'H24'
+      - name: page
+        in: query
+        description: 'Page number'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: '0'
+          default: '0 ( = First Page )'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 content: [ 
+                   {
+                   plantEntityID: 12345678,
+                   loggerName: 'Name',
+                   loggerEntityID: 12345678,
+                   loggerMACAddress: 'AA:00:AA:00:AA:00',
+                   deviceEntityID: 12345678,
+                   deviceSerialNumber: '1234-1P123-1234',
+                   eventSeverity: 'MEDIUM',
+                   eventType: 'PWROFF',
+                   eventStart: '2020-12-14 11:43 AM +0000',
+                   eventEnd: '2020-12-15 11:43 AM +0000',
+                   },
+                 ],
+                 lastPage: 'true',
+                 fisrtPage: 'true',
+                 numberOfElements: 1,
+                 totalElements: 1,
+                 totalPages: 1,
+                 pageSize: 50,
+                 pageNumber: 0
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/stats/power/aggregated/{entityID}/{dataType}/{valueType}:
+    get:
+      tags:
+      - Telemetry Data
+      summary: Aggregated Power Data
+      description: Allows to retrieve aggregated Power or Irradiance values of a Plant or a Device.<br><hr><strong>Note:</strong> <i>the API may respond with empty resources if you enter Data Type(s) related to Device(s) that do not support the requested resource, or if you do not have certain devices correctly installed in relation to the telemetry information that you want to call.</i><br><hr> <strong>Returns:</strong><ul><li>Units ( <i>W for Power, W/m<sup>2</sup> for Irradiance</i> )</li><li>Value</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Telemetries Data</a></p>
+      operationId: GetPowerData-aggregated
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant or Device  ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: dataType
+        in: path
+        description: 'Data type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'GenerationPower'
+          - 'DCGenerationPower'
+          - 'Irradiance'
+          - 'GridPowerExport'
+          - 'StoredPower'
+          - 'ActivePowerEV'
+          example: 'GenerationPower'
+      - name: valueType
+        in: path
+        description: 'Value type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'maximum'
+          - 'minimum'
+          - 'average'
+          example: 'average'
+      - name: startDate
+        in: query
+        description: 'Start Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      - name: timeZone
+        in: query
+        description: 'Plant Time Zone<br> ( <i>Format:</i> Civilian abbreviation or Country/City )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'Europe/Rome'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 units: "watts",
+                 value: 123.456789
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/stats/frequency/aggregated/{entityID}/{dataType}/{valueType}:
+    get:
+      tags:
+      - Telemetry Data
+      summary: Aggregated Frequency Data
+      description: Allows to retrieve aggregated Frequency values of a Plant or a Device.<br><hr><strong>Note:</strong><i> the API may respond with empty resources if you enter Data Type(s) related to Device(s) that do not support the requested resource, or if you do not have certain devices correctly installed in relation to the telemetry information that you want to call.</i><br><hr> <strong>Returns:</strong><ul><li>Units ( <i>hertz</i> )</li><li>Value</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Telemetries Data</a></p>
+      operationId: GetFrequencyData-aggregated
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant or Device  ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: dataType
+        in: path
+        description: 'Data type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'LineFrequency'
+          example: 'LineFrequency'
+      - name: valueType
+        in: path
+        description: 'Value type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'maximum'
+          - 'minimum'
+          - 'average'
+          example: 'average'
+      - name: startDate
+        in: query
+        description: 'Start Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      - name: timeZone
+        in: query
+        description: 'Plant Time Zone<br> ( <i>Format:</i> Civilian abbreviation or Country/City )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'Europe/Rome'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 units: "hertz",
+                 value: 12.3456789
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/stats/wind/aggregated/{entityID}/{dataType}/{valueType}:
+    get:
+      tags:
+      - Telemetry Data
+      summary: Aggregated Wind Data
+      description: Allows to retrieve aggregated Wind values of a Plant or a Device.<br><hr><strong>Note:</strong><i> the API may respond with empty resources if you enter Data Type(s) related to Device(s) that do not support the requested resource, or if you do not have certain devices correctly installed in relation to the telemetry information that you want to call.</i><br><hr><strong>Returns:</strong><ul><li>Units ( <i>mi/h for Speed, °N for Direction</i> )</li><li>Value</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Telemetries Data</a></p>
+      operationId: GetWindData-aggregated
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant or Device  ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: dataType
+        in: path
+        description: 'Data type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'WindDirection'
+          - 'WindSpeed'
+          example: 'WindDirection'
+      - name: valueType
+        in: path
+        description: 'Value type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'maximum'
+          - 'minimum'
+          - 'average'
+          example: 'average'
+      - name: startDate
+        in: query
+        description: 'Start Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      - name: timeZone
+        in: query
+        description: 'Plant Time Zone<br> ( <i>Format:</i> Civilian abbreviation or Country/City )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'Europe/Rome'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 units: "miles-per-hour",
+                 value: 12.34
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/stats/temperature/aggregated/{entityID}/{dataType}/{valueType}:
+    get:
+      tags:
+      - Telemetry Data
+      summary: Aggregated Temperature Data
+      description: Allows to retrieve aggregated Temperature values of a Plant or a Device.<br><hr><strong>Note:</strong><i> the API may respond with empty resources if you enter Data Type(s) related to Device(s) that do not support the requested resource, or if you do not have certain devices correctly installed in relation to the telemetry information that you want to call.</i><br><hr> <strong>Returns:</strong><ul><li>Units ( <i>°C</i> )</li><li>Value</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Telemetries Data</a></p>
+      operationId: GetTemperatureData-aggregated
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant or Device  ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: dataType
+        in: path
+        description: 'Data type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'CellTemp'
+          - 'AmbientTemp'
+          example: 'AmbientTemp'
+      - name: valueType
+        in: path
+        description: 'Value type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'maximum'
+          - 'minimum'
+          - 'average'
+          example: 'average'
+      - name: startDate
+        in: query
+        description: 'Start Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      - name: timeZone
+        in: query
+        description: 'Plant Time Zone<br> ( <i>Format:</i> Civilian abbreviation or Country/City )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'Europe/Rome'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 units: "celsius",
+                 value: 12.34
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/stats/voltage/aggregated/{entityID}/{dataType}/{valueType}:
+    get:
+      tags:
+      - Telemetry Data
+      summary: Aggregated Voltage Data
+      description: Allows to retrieve aggregated Voltage values of a Plant or a Device.<br><hr><strong>Note:</strong><i> the API may respond with empty resources if you enter Data Type(s) related to Device(s) that do not support the requested resource, or if you do not have certain devices correctly installed in relation to the telemetry information that you want to call.</i><br><hr> <strong>Returns:</strong><ul><li>Units ( <i>V</i> )</li><li>Value</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Telemetries Data</a></p>
+      operationId: GetVoltageData-aggregated
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant or Device  ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: dataType
+        in: path
+        description: 'Data type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'Voltage'
+          - 'DCVoltage'
+          example: 'Voltage'
+      - name: valueType
+        in: path
+        description: 'Value type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'maximum'
+          - 'minimum'
+          - 'average'
+          example: 'average'
+      - name: startDate
+        in: query
+        description: 'Start Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      - name: timeZone
+        in: query
+        description: 'Plant Time Zone<br> ( <i>Format:</i> Civilian abbreviation or Country/City )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'Europe/Rome'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 units: "voltage",
+                 value: 123.456789
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/stats/current/aggregated/{entityID}/{dataType}/{valueType}:
+    get:
+      tags:
+      - Telemetry Data
+      summary: Aggregated Current Data
+      description: Allows to retrieve aggregated Current values of a Plant or a Device.<br><hr><strong>Note:</strong><i> the API may respond with empty resources if you enter Data Type(s) related to Device(s) that do not support the requested resource, or if you do not have certain devices correctly installed in relation to the telemetry information that you want to call.</i><br><hr> <strong>Returns:</strong><ul><li>Units ( <i>A</i> )</li><li>Value</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Telemetries Data</a></p>
+      operationId: GetCurrentData-aggregated
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant or Device  ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: dataType
+        in: path
+        description: 'Data type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'Current'
+          - 'DCCurrent'
+          example: 'Current'
+      - name: valueType
+        in: path
+        description: 'Value type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'maximum'
+          - 'minimum'
+          - 'average'
+          example: 'average'
+      - name: startDate
+        in: query
+        description: 'Start Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      - name: timeZone
+        in: query
+        description: 'Plant Time Zone<br> ( <i>Format:</i> Civilian abbreviation or Country/City )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'Europe/Rome'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 units: "amps",
+                 value: 0.123456789
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/stats/energy/aggregated/{entityID}/{dataType}/{valueType}:
+    get:
+      tags:
+      - Telemetry Data
+      summary: Aggregated Energy Data
+      description: Allows to retrieve aggregated Energy or Insolation values of a Plant or a Device.<br><hr><strong>Note:</strong> <i>the API may respond with empty resources if you enter Data Type(s) related to Device(s) that do not support the requested resource, or if you do not have certain devices correctly installed in relation to the telemetry information that you want to call.</i><br><hr> <strong>Returns:</strong><ul><li>Units ( <i>kWh for Energy, kWh/m<sup>2</sup> for Insolation</i> )</li><li>Value</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Telemetries Data</a></p>
+      operationId: GetEnergyData-aggregated
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant or Device  ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: dataType
+        in: path
+        description: 'Data type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'GenerationEnergy'
+          - 'DCGenerationEnergy'
+          - 'Insolation'
+          - 'StorageInEnergy'
+          - 'StorageOutEnergy'
+          - 'GridEnergyExport'
+          - 'GridEnergyImport'
+          - 'SelfConsumedEnergy'
+          - 'ActiveEnergyEV'
+          - 'SessionEnergyEV'
+          example: 'GenerationEnergy'
+      - name: valueType
+        in: path
+        description: 'Value type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'cumulative'
+          - 'delta'
+          example: 'delta'
+      - name: startDate
+        in: query
+        description: 'Start Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      - name: timeZone
+        in: query
+        description: 'Plant Time Zone<br> ( <i>Format:</i> Civilian abbreviation or Country/City )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'Europe/Rome'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: {
+                 units: "kilowatt-hours",
+                 value: 1234.567
+               }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/stats/power/timeseries/{entityID}/{dataType}/{valueType}:
+    get:
+      tags:
+      - Telemetry Data
+      summary: Timeseries Power Data
+      description: Allows to retrieve a timeseried Power or Irradiance values of a Plant or a Device.<br><hr><strong>Note:</strong> <i>the API may respond with empty resources if you enter Data Type(s) related to Device(s) that do not support the requested resource, or if you do not have certain devices correctly installed in relation to the telemetry information that you want to call.</i><br><hr> <strong>Returns:</strong><ul><li>Start ( <i>Epoch</i> )</li><li>Units ( <i>W for Power, W/m<sup>2</sup> for Irradiance</i> )</li><li>Value</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Telemetries Data</a></p>
+      operationId: GetPowerData-timeseries
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant or Device  ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: sampleSize
+        in: query
+        description: 'Sampling rate of data(s) for the API call(s)'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'Min5'
+          - 'Min15'
+          - 'Hour'
+          - 'Day'
+          - 'Month'
+          - 'Year'
+          example: 'Min15'
+      - name: dataType
+        in: path
+        description: 'Data type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'GenerationPower'
+          - 'DCGenerationPower'
+          - 'Irradiance'
+          - 'GridPowerExport'
+          - 'StoredPower'
+          - 'ActivePowerEV'
+          example: 'GenerationPower'
+      - name: valueType
+        in: path
+        description: 'Value type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'maximum'
+          - 'minimum'
+          - 'average'
+          example: 'average'
+      - name: startDate
+        in: query
+        description: 'Start Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      - name: timeZone
+        in: query
+        description: 'Plant Time Zone<br> ( <i>Format:</i> Civilian abbreviation or Country/City )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'Europe/Rome'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: [
+                {
+                  start: 1608018600,
+                  units: "watts",
+                  value: 123.333333
+                },
+                {
+                  start: 1608018900,
+                  units: "watts",
+                  value: 123.444444
+                },
+                {
+                  start: 1608019200,
+                  units: "watts",
+                  value: 123.555555
+                },
+                {
+                  start: 1608019500,
+                  units: "watts",
+                  value: 123.666666
+                },
+              ]
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/stats/voltage/timeseries/{entityID}/{dataType}/{valueType}:
+    get:
+      tags:
+      - Telemetry Data
+      summary: Timeseries Voltage Data
+      description: Allows to retrieve a timeseried Voltage values of a Plant or a Device.<br><hr><strong>Note:</strong> <i>the API may respond with empty resources if you enter Data Type(s) related to Device(s) that do not support the requested resource, or if you do not have certain devices correctly installed in relation to the telemetry information that you want to call.</i><br><hr> <strong>Returns:</strong><ul><li>Start ( <i>Epoch</i> )</li><li>Units ( <i>V</i> )</li><li>Value</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Telemetries Data</a></p>
+      operationId: GetVoltageData-timeseries
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant or Device  ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: sampleSize
+        in: query
+        description: 'Sampling rate of data(s) for the API call(s)'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'Min5'
+          - 'Min15'
+          - 'Hour'
+          - 'Day'
+          - 'Month'
+          - 'Year'
+          example: 'Min15'
+      - name: dataType
+        in: path
+        description: 'Data type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'Voltage'
+          - 'DCVoltage'
+          example: 'Voltage'
+      - name: valueType
+        in: path
+        description: 'Value type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'maximum'
+          - 'minimum'
+          - 'average'
+          example: 'average'
+      - name: startDate
+        in: query
+        description: 'Start Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      - name: timeZone
+        in: query
+        description: 'Plant Time Zone<br> ( <i>Format:</i> Civilian abbreviation or Country/City )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'Europe/Rome'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: [
+                {
+                  start: 1608018600,
+                  units: "volts",
+                  value: 123.333333
+                },
+                {
+                  start: 1608018900,
+                  units: "volts",
+                  value: 123.444444
+                },
+                {
+                  start: 1608019200,
+                  units: "volts",
+                  value: 123.555555
+                },
+                {
+                  start: 1608019500,
+                  units: "volts",
+                  value: 123.666666
+                },
+              ]
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/stats/frequency/timeseries/{entityID}/{dataType}/{valueType}:
+    get:
+      tags:
+      - Telemetry Data
+      summary: Timeseries Frequency Data
+      description: Allows to retrieve a timeseried Frequency values of a Plant or a Device.<br><hr><strong>Note:</strong> <i>the API may respond with empty resources if you enter Data Type(s) related to Device(s) that do not support the requested resource, or if you do not have certain devices correctly installed in relation to the telemetry information that you want to call.</i><br><hr> <strong>Returns:</strong><ul><li>Start ( <i>Epoch</i> )</li><li>Units ( <i>Hertzs</i> )</li><li>Value</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Telemetries Data</a></p>
+      operationId: GetFrequencyData-timeseries
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant or Device  ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: sampleSize
+        in: query
+        description: 'Sampling rate of data(s) for the API call(s)'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'Min5'
+          - 'Min15'
+          - 'Hour'
+          - 'Day'
+          - 'Month'
+          - 'Year'
+          example: 'Min15'
+      - name: dataType
+        in: path
+        description: 'Data type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'LineFrequency'
+          example: 'LineFrequency'
+      - name: valueType
+        in: path
+        description: 'Value type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'maximum'
+          - 'minimum'
+          - 'average'
+          example: 'average'
+      - name: startDate
+        in: query
+        description: 'Start Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      - name: timeZone
+        in: query
+        description: 'Plant Time Zone<br> ( <i>Format:</i> Civilian abbreviation or Country/City )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'Europe/Rome'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: [
+                {
+                  start: 1608018600,
+                  units: "hertzs",
+                  value: 123.333333
+                },
+                {
+                  start: 1608018900,
+                  units: "hertzs",
+                  value: 123.444444
+                },
+                {
+                  start: 1608019200,
+                  units: "hertzs",
+                  value: 123.555555
+                },
+                {
+                  start: 1608019500,
+                  units: "hertzs",
+                  value: 123.666666
+                },
+              ]
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/stats/wind/timeseries/{entityID}/{dataType}/{valueType}:
+    get:
+      tags:
+      - Telemetry Data
+      summary: Timeseries Wind Data
+      description: Allows to retrieve a timeseried Wind values of a Plant or a Device.<br><hr><strong>Note:</strong> <i>the API may respond with empty resources if you enter Data Type(s) related to Device(s) that do not support the requested resource, or if you do not have certain devices correctly installed in relation to the telemetry information that you want to call.</i><br><hr> <strong>Returns:</strong><ul><li>Start ( <i>Epoch</i> )</li><li>Units ( <i>mi/h for Speed, °N for Direction</i> )</li><li>Value</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Telemetries Data</a></p>
+      operationId: GetWindData-timeseries
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant or Device  ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: sampleSize
+        in: query
+        description: 'Sampling rate of data(s) for the API call(s)'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'Min5'
+          - 'Min15'
+          - 'Hour'
+          - 'Day'
+          - 'Month'
+          - 'Year'
+          example: 'Min15'
+      - name: dataType
+        in: path
+        description: 'Data type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'WindDirection'
+          - 'WindSpeed'
+          example: 'WindDirection'
+      - name: valueType
+        in: path
+        description: 'Value type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'maximum'
+          - 'minimum'
+          - 'average'
+          example: 'average'
+      - name: startDate
+        in: query
+        description: 'Start Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      - name: timeZone
+        in: query
+        description: 'Plant Time Zone<br> ( <i>Format:</i> Civilian abbreviation or Country/City )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'Europe/Rome'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example: 
+               result: [
+                {
+                  start: 1608018600,
+                  units: "degrees-north",
+                  value: 123.333333
+                },
+                {
+                  start: 1608018900,
+                  units: "degrees-north",
+                  value: 123.444444
+                },
+                {
+                  start: 1608019200,
+                  units: "degrees-north",
+                  value: 123.555555
+                },
+                {
+                  start: 1608019500,
+                  units: "degrees-north",
+                  value: 123.666666
+                },
+              ]
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/stats/temperature/timeseries/{entityID}/{dataType}/{valueType}:
+    get:
+      tags:
+      - Telemetry Data
+      summary: Timeseries Temperature Data
+      description: Allows to retrieve a timeseried Temperature values of a Plant or a Device.<br><hr><strong>Note:</strong> <i>the API may respond with empty resources if you enter Data Type(s) related to Device(s) that do not support the requested resource, or if you do not have certain devices correctly installed in relation to the telemetry information that you want to call.</i><hr><strong>Returns:</strong><ul><li>Start ( <i>Epoch</i> )</li><li>Units ( <i>°C</i> )</li><li>Value</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Telemetries Data</a></p>
+      operationId: GetTemperatureData-timeseries
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant or Device  ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: sampleSize
+        in: query
+        description: 'Sampling rate of data(s) for the API call(s)'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'Min5'
+          - 'Min15'
+          - 'Hour'
+          - 'Day'
+          - 'Month'
+          - 'Year'
+          example: 'Min15'
+      - name: dataType
+        in: path
+        description: 'Data type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'CellTemp'
+          - 'AmbientTemp'
+          example: 'CellTemp'
+      - name: valueType
+        in: path
+        description: 'Value type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'maximum'
+          - 'minimum'
+          - 'average'
+          example: 'average'
+      - name: startDate
+        in: query
+        description: 'Start Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      - name: timeZone
+        in: query
+        description: 'Plant Time Zone<br> ( <i>Format:</i> Civilian abbreviation or Country/City )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'Europe/Rome'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example:
+               result: [
+                {
+                  start: 1608018600,
+                  units: "celsius",
+                  value: 123.333333
+                },
+                {
+                  start: 1608018900,
+                  units: "celsius",
+                  value: 123.444444
+                },
+                {
+                  start: 1608019200,
+                  units: "celsius",
+                  value: 123.555555
+                },
+                {
+                  start: 1608019500,
+                  units: "celsius",
+                  value: 123.666666
+                },
+              ]
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/stats/current/timeseries/{entityID}/{dataType}/{valueType}:
+    get:
+      tags:
+      - Telemetry Data
+      summary: Timeseries Current Data
+      description: Allows to retrieve a timeseried Current values of a Plant or a Device.<br><hr><strong>Note:</strong> <i>the API may respond with empty resources if you enter Data Type(s) related to Device(s) that do not support the requested resource, or if you do not have certain devices correctly installed in relation to the telemetry information that you want to call.</i><hr><strong>Returns:</strong><ul><li>Start ( <i>Epoch</i> )</li><li>Units ( <i>A</i> )</li><li>Value</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Telemetries Data</a></p>
+      operationId: GetCurrentData-timeseries
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant or Device  ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: sampleSize
+        in: query
+        description: 'Sampling rate of data(s) for the API call(s)'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'Min5'
+          - 'Min15'
+          - 'Hour'
+          - 'Day'
+          - 'Month'
+          - 'Year'
+          example: 'Min15'
+      - name: dataType
+        in: path
+        description: 'Data type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'Current'
+          - 'DCCurrent'
+          example: 'Current'
+      - name: valueType
+        in: path
+        description: 'Value type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'maximum'
+          - 'minimum'
+          - 'average'
+          example: 'average'
+      - name: startDate
+        in: query
+        description: 'Start Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      - name: timeZone
+        in: query
+        description: 'Plant Time Zone<br> ( <i>Format:</i> Civilian abbreviation or Country/City )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'Europe/Rome'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example:
+               result: [
+                {
+                  start: 1608018600,
+                  units: "amps",
+                  value: 0.123456789
+                },
+                {
+                  start: 1608018900,
+                  units: "amps",
+                  value: 0.234567891
+                },
+                {
+                  start: 1608019200,
+                  units: "amps",
+                  value: 0.345678912
+                },
+                {
+                  start: 1608019500,
+                  units: "amps",
+                  value: 0.456789123
+                },
+              ]
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/stats/energy/timeseries/{entityID}/{dataType}/{valueType}:
+    get:
+      tags:
+      - Telemetry Data
+      summary: Timeseries Energy Data
+      description: Allows to retrieve a timeseried Energy or Insolation values of a Plant or a Device.<br><hr><strong>Note:</strong> <i>the API may respond with empty resources if you enter Data Type(s) related to Device(s) that do not support the requested resource, or if you do not have certain devices correctly installed in relation to the telemetry information that you want to call.</i><hr><strong>Returns:</strong><ul><li>Start ( <i>Epoch</i> )</li><li>Units ( <i>kWh for Energy, kWh/m<sup>2</sup> for Insolation</i> )</li><li>Value</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Telemetries Data</a></p>
+      operationId: GetEnergyData-timeseries
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant or Device  ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: sampleSize
+        in: query
+        description: 'Sampling rate of data(s) for the API call(s)'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'Min5'
+          - 'Min15'
+          - 'Hour'
+          - 'Day'
+          - 'Month'
+          - 'Year'
+          example: 'Min15'
+      - name: dataType
+        in: path
+        description: 'Data type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'GenerationEnergy'
+          - 'DCGenerationEnergy'
+          - 'Insolation'
+          - 'StorageInEnergy'
+          - 'StorageOutEnergy'
+          - 'GridEnergyExport'
+          - 'GridEnergyImport'
+          - 'SelfConsumedEnergy'
+          - 'ActiveEnergyEV'
+          - 'SessionEnergyEV'
+          example: 'dataType'
+      - name: valueType
+        in: path
+        description: 'Value type for the API call(s)'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'cumulative'
+          - 'delta'
+          example: 'delta'
+      - name: startDate
+        in: query
+        description: 'Start Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      - name: timeZone
+        in: query
+        description: 'Plant Time Zone<br> ( <i>Format:</i> Civilian abbreviation or Country/City )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'Europe/Rome'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example:
+               result: [
+                {
+                  start: 1608018600,
+                  units: "kilowatt-hours",
+                  value: 0.123456789
+                },
+                {
+                  start: 1608018900,
+                  units: "kilowatt-hours",
+                  value: 0.234567891
+                },
+                {
+                  start: 1608019200,
+                  units: "kilowatt-hours",
+                  value: 0.345678912
+                },
+                {
+                  start: 1608019500,
+                  units: "kilowatt-hours",
+                  value: 0.456789123
+                },
+              ]
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/kpis/timeseries/{entityID}/{dataType}/{valueType}:
+    get:
+      tags:
+      - KPIs
+      summary: Timeseries KPIs (Key Performance Indicators)
+      description: Allows to retrieve timeseried Power-Based KPIs or Energy-Based KPIs values of a Plant.<br><hr><strong>Note:</strong> <i>the API may respond with empty resources if you do not have certain devices correctly installed in relation to the telemetry information that you want to call.</i><hr><strong>Returns:</strong><ul><li>Start ( <i>Epoch</i> )</li><li>Units ( <i>kWh or % for Energy-Based KPIs, Watts or % for Power-Based KPIs</i> )</li><li>Value</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Telemetries Data</a></p>
+      operationId: GetKPI-timeseries
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant or Device  ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: sampleSize
+        in: query
+        description: 'Sampling rate of data(s) for the API call(s)<br><hr><i>For the <strong>PerformanceRatio</strong> dataType use the <strong>Day</strong> sampleSize<i><hr>'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - 'Min5'
+          - 'Min15'
+          - 'Hour'
+          - 'Day'
+          - 'Month'
+          - 'Year'
+          example: 'Min15'
+      - name: dataType
+        in: path
+        description: 'Data type for the API call(s).<br><br><strong>Power-Based KPIs</strong>: StateofCharge, StateofHealth, LoadsPowerConsumed, LoadsPowerConsumedPV<br><br><strong>Energy-Based KPIs</strong>: PerformanceRatio, SelfConsumption, SelfSufficiency, LoadsEnergyConsumed, LoadsEnergyConsumedPV<br><hr><i>Please note that for the <strong>PerformanceRatio</strong> dataType the algorithm set as default is used as reference for the percentage calculation (for more information check your plant configuration in the management section in Plant Portfolio Manager)<i><hr>'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'PerformanceRatio'
+          - 'StateOfCharge'
+          - 'StateOfHealth'
+          - 'SelfConsumption'
+          - 'SelfSufficiency'
+          - 'LoadsEnergyConsumed'
+          - 'LoadsEnergyConsumedPV'
+          - 'LoadsPowerConsumed'
+          - 'LoadsPowerConsumedPV'
+          example: 'LoadsPowerConsumed'
+      - name: valueType
+        in: path
+        description: 'Value type for the API call(s).<br>Distinction of ValueType(s) to be used based on the KPIs you want to call:<br><br><strong>Power-Based KPIs</strong>: maximum, minimum, average<br><br><strong>Energy-Based KPIs</strong>: cumulative, delta<br><hr><i>For the <strong>PerformanceRatio</strong> dataType use the <strong>delta</strong> valueType<i><hr>'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'maximum'
+          - 'minimum'
+          - 'average'
+          - 'cumulative'
+          - 'delta'
+          example: 'average'
+      - name: startDate
+        in: query
+        description: 'Start Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      - name: timeZone
+        in: query
+        description: 'Plant Time Zone<br> ( <i>Format:</i> Civilian abbreviation or Country/City )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'Europe/Rome'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example:
+               result: [
+                {
+                  start: 1608018600,
+                  units: "whole-percent",
+                  value: 12.3456789
+                },
+                {
+                  start: 1608018900,
+                  units: "whole-percent",
+                  value: 12.3456789
+                },
+                {
+                  start: 1608019200,
+                  units: "whole-percent",
+                  value: 12.3456789
+                },
+                {
+                  start: 1608019500,
+                  units: "whole-percent",
+                  value: 12.3456789
+                },
+              ]
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/kpis/aggregated/{entityID}/{dataType}/{valueType}:
+    get:
+      tags:
+      - KPIs
+      summary: Aggregated KPIs (Key Performance Indicators)
+      description: Allows to retrieve aggregated Power-Data KPIs or Energy-Data KPIs values of a Plant.<br><hr><strong>Note:</strong> <i>the API may respond with empty resources if you do not have certain devices correctly installed in relation to the telemetry information that you want to call.</i><hr><strong>Returns:</strong><ul><li>Start ( <i>Epoch</i> )</li><li>Units ( <i>kWh or % for Energy-Based KPIs, Watts or % for Power-Based KPIs</i> )</li><li>Value</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'"><a href="#" target="_blank_">Aurora Vision APIs - User Guide - Telemetries Data</a></p>
+      operationId: GetKPI-aggregated
+      parameters:
+      - name: entityID
+        in: path
+        description: 'Plant or Device ID in Aurora Vision'
+        required: true
+        style: simple
+        schema:
+          type: integer
+          format: int32
+          example: '12345678'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      - name: dataType
+        in: path
+        description: 'Data type for the API call(s).<br><br><strong>Power-Based KPIs</strong>: StateofCharge, StateofHealth, LoadsPowerConsumed, LoadsPowerConsumedPV<br><br><strong>Energy-Based KPIs</strong>: PerformanceRatio, SelfConsumption, SelfSufficiency, LoadsEnergyConsumed, LoadsEnergyConsumedPV<br><hr><i>Please note that for the <strong>PerformanceRatio</strong> dataType the algorithm set as default is used as reference for the percentage calculation (for more information check your plant configuration in the management section in Plant Portfolio Manager)<i><hr>'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'PerformanceRatio'
+          - 'StateOfCharge'
+          - 'StateOfHealth'
+          - 'SelfConsumption'
+          - 'SelfSufficiency'
+          - 'LoadsEnergyConsumed'
+          - 'LoadsEnergyConsumedPV'
+          - 'LoadsPowerConsumed'
+          - 'LoadsPowerConsumedPV'
+          example: 'LoadsPowerConsumed'
+      - name: valueType
+        in: path
+        description: 'Value type for the API call(s).<br>Distinction of ValueType(s) to be used based on the KPIs you want to call:<br><br><strong>Power-Based KPIs</strong>: maximum, minimum, average<br><br><strong>Energy-Based KPIs</strong>: cumulative, delta<br><hr><i>For the <strong>PerformanceRatio</strong> dataType use the <strong>delta</strong> valueType<i><hr>'
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - 'maximum'
+          - 'minimum'
+          - 'average'
+          - 'cumulative'
+          - 'delta'
+          example: 'average'
+      - name: startDate
+        in: query
+        description: 'Start Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220101'
+      - name: endDate
+        in: query
+        description: 'End Date<br> ( <i>Pattern:</i> yyyyMMdd )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: datetime
+          example: '20220102'
+      - name: timeZone
+        in: query
+        description: 'Plant Time Zone<br> ( <i>Format:</i> Civilian abbreviation or Country/City )'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'Europe/Rome'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example:
+               result:
+                {
+                  start: 1608018600,
+                  units: "whole-percent",
+                  value: 12.3456789
+                }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/region:
+    get:
+      tags:
+      - Regions
+      summary: Regions
+      description: Allows to retrieve available regions/states in a Country as stored in Aurora Vision. <br><hr><strong>Returns:</strong><ul><li>Province Name</li><li>Province Code</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/region?countryCode=AF "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetRegions
+      parameters:
+      - name: countryCode
+        in: query
+        description: 'ISO 3166 Alpha2 Country Code Format Standard <br><br>(<i>Please refer to:&nbsp; <a href="https://en.wikipedia.org/wiki/ISO_3166-1" target="_blank_">ISO 3166-1 Wikipedia</a></i>&nbsp;)'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'AF'
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example:
+               result: [
+                {
+                  name: "Province A",
+                  code: "PRA",
+                },
+                {
+                  name: "Province B",
+                  code: "PRB",
+                },
+                {
+                  name: "Province C",
+                  code: "PRC",
+                },
+              ]
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/ip-ranges/datalogger:
+    get:
+      tags:
+      - IP Ranges
+      summary: Datalogger IP Ranges
+      description: Allows to retrieve IP/CIDR couples used by devices to contact and connect to Aurora vision. <br><hr><strong>Returns:</strong><ul><li>Service Type</li><li>Prefixes</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/ip-ranges/datalogger "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetIPRanges-Datalogger
+      parameters:
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'Abcdef1ghi2=?//lmno3456pqvw789yz!'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example:
+               result: {
+                service: "datalogger",
+                prefixes: [
+                  "00.00.00.11/12",
+                  "00.00.00.22/34",
+                  "00.00.00.33/56",
+                  "00.00.00.44/78"
+              ]
+            }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+  /v1/ip-ranges/web:
+    get:
+      tags:
+      - IP Ranges
+      summary: Web IP Ranges
+      description: Allows to retrieve IP/CIDR couples of the devices that are contatcted by Aurora vision. <br><hr><strong>Returns:</strong><ul><li>Service Type</li><li>Prefixes</li></ul><hr><strong>Example (CURL)</strong><br><p style="font-family:'Consolas'">curl --request https://api.auroravision.net/api/rest/v1/ip-ranges/web "X-AuroraVision-Token:Abcdef1ghi2=?//lmno3456pqvw789yz!"</p>
+      operationId: GetIPRanges-Web
+      parameters:
+      - name: X-AuroraVision-Token
+        in: header
+        description: 'Aurora Vision Access Token'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 'accessToken'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+           application/json:
+              example:
+               result: {
+                service: "Abcdef1ghi2=?//lmno3456pqvw789yz!",
+                prefixes: [
+                  "00.00.00.11/12",
+                  "00.00.00.22/34",
+                  "00.00.00.33/56",
+                  "00.00.00.44/78"
+              ]
+            }
+        400:
+          description: 'Malformed or missing authorization token or malformed or missing parameter / header'
+        401:
+          description: 'Bad credentials or Authorization'
+        403:
+          description: 'Mount point or asset not accessible'
+        404:
+          description: 'Mount point or asset not found'
+        405:
+          description: 'HTTP method not allowed for the selected mount point'
+        503:
+          description: 'Service not available at the moment'
+      deprecated: false
+tags:
+- name: Service Info
+- name: Service Agreements
+- name: Authentication
+- name: Assets
+- name: Organizations
+- name: Portfolios
+- name: Plant Groups
+- name: Plants
+- name: Loggers
+- name: Devices
+- name: Telemetry Data
+- name: KPIs
+- name: Regions
+- name: IP Ranges

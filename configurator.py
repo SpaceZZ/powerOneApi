@@ -25,7 +25,8 @@ class Configurator:
             self.user = config["SETTINGS"]["user"]
             self.password = config["SETTINGS"]["password"]
             self.installationID = config["SETTINGS"]["installationID"]
-            self.country = config["SETTINGS"]["country"]
+            self.timezone = config["SETTINGS"]["timezone"]
+            self.api_key = config["SETTINGS"]["api_key"]
 
             self.email = config["CREDENTIALS"]["email"]
             self.email_password = config["CREDENTIALS"]["password"]

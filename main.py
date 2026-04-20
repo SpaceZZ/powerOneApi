@@ -57,8 +57,9 @@ def main():
     session = aurora_vision_api.Session(
         user=config.user,
         password=config.password,
+        api_key=config.api_key,
         installationID=config.installationID,
-        country=config.country,
+        timezone=config.timezone,
     )
 
     logger.info("Fetching summary data...")
