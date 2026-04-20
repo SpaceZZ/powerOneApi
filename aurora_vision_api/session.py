@@ -43,6 +43,50 @@ class Session:
             return self._fetch_extended()
         return self._fetch_summary()
 
+    def accept_eula(self):
+        """
+        One-time setup: accept the Aurora Vision EULA.
+        Must be called before authentication will succeed.
+        Returns True on success, False on failure.
+        """
+        try:
+            # Show the EULA text first
+            get_resp = requests.get(
+                f"{_BASE_URL}/eula",
+                headers={**self._headers, "X-AuroraVision-ApiKey": self._api_key},
+                auth=(self._user, self._password),
+                timeout=15,
+            )
+            if get_resp.status_code == 200:
+                eula_text = get_resp.json().get("result", "")
+                print("\n" + "=" * 70)
+                print("AURORA VISION EULA")
+                print("=" * 70)
+                print(eula_text[:3000])
+                if len(eula_text) > 3000:
+                    print(f"\n[... {len(eula_text) - 3000} more characters — full text returned by API ...]")
+                print("=" * 70 + "\n")
+            else:
+                logger.warning(f"Could not retrieve EULA text (HTTP {get_resp.status_code}) — proceeding to accept anyway")
+
+            # Accept
+            put_resp = requests.put(
+                f"{_BASE_URL}/eula",
+                headers={**self._headers, "X-AuroraVision-ApiKey": self._api_key},
+                auth=(self._user, self._password),
+                timeout=15,
+            )
+            if put_resp.status_code == 200:
+                status = put_resp.json().get("result", "")
+                logger.info(f"EULA acceptance response: {status}")
+                return True
+            else:
+                logger.error(f"EULA acceptance failed with HTTP {put_resp.status_code}: {put_resp.text[:500]}")
+                return False
+        except Exception as ex:
+            logger.exception(f"EULA request failed: {ex}")
+            return False
+
     def _authenticate(self):
         """
         Exchange credentials for a session token via /authenticate.
@@ -59,6 +103,12 @@ class Session:
                 self._token = resp.json()["result"]
                 logger.info("Aurora Vision authentication successful")
                 return True
+            elif resp.status_code == 500:
+                logger.error(
+                    "Authentication returned HTTP 500 — Aurora Vision EULA has not been accepted. "
+                    "Run:  python main.py --accept-eula"
+                )
+                return False
             else:
                 logger.error(
                     f"Authentication failed with HTTP {resp.status_code}: {resp.text[:500]}"

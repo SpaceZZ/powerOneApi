@@ -39,6 +39,11 @@ def parse_args():
         action="store_true",
         help="Fetch data, render and send the email, but skip SQL archiving",
     )
+    parser.add_argument(
+        "--accept-eula",
+        action="store_true",
+        help="One-time setup: display and accept the Aurora Vision EULA, then exit",
+    )
     return parser.parse_args()
 
 
@@ -53,7 +58,7 @@ def main():
     # Read configuration
     config = configurator.Configurator()
 
-    # Fetch data from Aurora Vision
+    # Build session (used by all modes)
     session = aurora_vision_api.Session(
         user=config.user,
         password=config.password,
@@ -61,6 +66,16 @@ def main():
         installationID=config.installationID,
         timezone=config.timezone,
     )
+
+    if args.accept_eula:
+        logger.info("=== EULA ACCEPTANCE MODE ===")
+        success = session.accept_eula()
+        if success:
+            logger.info("EULA accepted — you can now run the script normally.")
+        else:
+            logger.error("EULA acceptance failed — check the errors above.")
+            sys.exit(1)
+        return
 
     logger.info("Fetching summary data...")
     result = session.get_data()
