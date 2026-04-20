@@ -59,3 +59,23 @@ def get_only_valid_data(data):
     mid_time = find_middle(keys)
 
     return non_zero_data, start_time, end_time, mid_time
+
+
+def get_irradiance_values(irradiance_data, power_time_keys):
+    """
+    Returns a list of irradiance values (W/m²) aligned to the same HH:MM:SS keys
+    as the filtered power data produced by get_only_valid_data().
+
+    :param irradiance_data: dict of {'YYYY-MM-DD HH:MM:SS': {'value': float, 'unit': str}}
+    :param power_time_keys: iterable of 'HH:MM:SS' strings (keys of non_zero_data)
+    :return: list of rounded integer irradiance values, 0 where no match
+    :rtype: list[int]
+    """
+    # Build a fast lookup: time-part-only → rounded value
+    irr_by_time = {}
+    for ts, val in irradiance_data.items():
+        if val["value"] is not None:
+            time_part = ts.split(" ")[1]
+            irr_by_time[time_part] = round(float(val["value"]))
+
+    return [irr_by_time.get(t, 0) for t in power_time_keys]

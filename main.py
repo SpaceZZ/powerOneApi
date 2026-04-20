@@ -68,6 +68,9 @@ def main():
     logger.info("Fetching extended (15-min bins) data...")
     result_extended = session.get_data(extended=True)
 
+    logger.info("Fetching irradiance data...")
+    irradiance_data = session.get_irradiance()
+
     if not result:
         logger.error("No summary data returned from API — aborting")
         sys.exit(1)
@@ -80,6 +83,10 @@ def main():
             sample = dict(list(result_extended.items())[:5])
             logger.info(json.dumps(sample, indent=2, default=str))
             logger.info(f"  ... ({len(result_extended)} total bins)")
+        if irradiance_data:
+            logger.info(f"--- Irradiance data ({len(irradiance_data)} bins) ---")
+            sample = dict(list(irradiance_data.items())[:5])
+            logger.info(json.dumps(sample, indent=2, default=str))
         return  # stop here in dry-run
 
     # --- Full run ---
@@ -95,8 +102,12 @@ def main():
 
         non_zero_data, start_time, end_time, mid_time = pv_calculator.get_only_valid_data(bin_data)
         if non_zero_data:
+            irradiance_values = (
+                pv_calculator.get_irradiance_values(irradiance_data, list(non_zero_data.keys()))
+                if irradiance_data else None
+            )
             chart_link = image_charts.create_link(
-                non_zero_data.values(), start_time, end_time, mid_time
+                non_zero_data.values(), start_time, end_time, mid_time, irradiance_values
             )
     else:
         logger.warning("Extended data unavailable — chart and peak power will be omitted")

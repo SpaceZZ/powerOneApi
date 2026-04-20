@@ -136,6 +136,36 @@ class Session:
 
         return result
 
+    def get_irradiance(self):
+        """
+        Fetches 15-min irradiance timeseries (W/m²) for today.
+        Returns dict keyed by 'YYYY-MM-DD HH:MM:SS' → {value, unit}, or {} on failure.
+        """
+        if self._token is None:
+            if not self._authenticate():
+                return {}
+
+        today = datetime.date.today()
+        tomorrow = today + datetime.timedelta(days=1)
+        url = (
+            f"{_BASE_URL}/v1/stats/power/timeseries/{self._installationID}"
+            f"/Irradiance/average"
+        )
+        data = self._get(url, params={
+            "startDate": today.strftime("%Y%m%d"),
+            "endDate": tomorrow.strftime("%Y%m%d"),
+            "timeZone": self._timezone,
+            "sampleSize": "Min15",
+        })
+
+        result = {}
+        for bin_item in (data or {}).get("result", []):
+            ts = self._convert_epoch_to_string(bin_item["start"])
+            result[ts] = self._generate_value_unit_dict(
+                bin_item.get("value"), bin_item.get("units", "watts")
+            )
+        return result
+
     def _fetch_extended(self):
         """
         Fetches 15-min power timeseries for today.
